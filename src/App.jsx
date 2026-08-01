@@ -16,67 +16,68 @@ const PHASES = {
 
 // ---------- Default catalog ----------
 const DEFAULTS = [
-  ["Iron Man", "2008-05-02", "P1"],
-  ["The Incredible Hulk", "2008-06-13", "P1"],
-  ["Iron Man 2", "2010-05-07", "P1"],
-  ["Thor", "2011-05-06", "P1"],
-  ["Captain America: The First Avenger", "2011-07-22", "P1"],
-  ["The Avengers", "2012-05-04", "P1"],
-  ["Iron Man 3", "2013-05-03", "P2"],
-  ["Thor: The Dark World", "2013-11-08", "P2"],
-  ["Captain America: The Winter Soldier", "2014-04-04", "P2"],
-  ["Guardians of the Galaxy", "2014-08-01", "P2"],
-  ["Avengers: Age of Ultron", "2015-05-01", "P2"],
-  ["Ant-Man", "2015-07-17", "P2"],
-  ["Captain America: Civil War", "2016-05-06", "P3"],
-  ["Doctor Strange", "2016-11-04", "P3"],
-  ["Guardians of the Galaxy Vol. 2", "2017-05-05", "P3"],
-  ["Spider-Man: Homecoming", "2017-07-07", "P3"],
-  ["Thor: Ragnarok", "2017-11-03", "P3"],
-  ["Black Panther", "2018-02-16", "P3"],
-  ["Avengers: Infinity War", "2018-04-27", "P3"],
-  ["Ant-Man and the Wasp", "2018-07-06", "P3"],
-  ["Captain Marvel", "2019-03-08", "P3"],
-  ["Avengers: Endgame", "2019-04-26", "P3"],
-  ["Spider-Man: Far From Home", "2019-07-02", "P3"],
-  ["Black Widow", "2021-07-09", "P4"],
-  ["Shang-Chi and the Legend of the Ten Rings", "2021-09-03", "P4"],
-  ["Eternals", "2021-11-05", "P4"],
-  ["Spider-Man: No Way Home", "2021-12-17", "P4"],
-  ["Doctor Strange in the Multiverse of Madness", "2022-05-06", "P4"],
-  ["Thor: Love and Thunder", "2022-07-08", "P4"],
-  ["Black Panther: Wakanda Forever", "2022-11-11", "P4"],
-  ["Ant-Man and the Wasp: Quantumania", "2023-02-17", "P5"],
-  ["Guardians of the Galaxy Vol. 3", "2023-05-05", "P5"],
-  ["The Marvels", "2023-11-10", "P5"],
-  ["Deadpool & Wolverine", "2024-07-26", "P5"],
-  ["Captain America: Brave New World", "2025-02-14", "P5"],
-  ["Thunderbolts*", "2025-05-02", "P5"],
-  ["The Fantastic Four: First Steps", "2025-07-25", "P6"],
-  ["Spider-Man: Brand New Day", "2026-07-31", "P6"],
-  ["Avengers: Doomsday", "2026-12-18", "P6"],
-  ["Avengers: Secret Wars", "2027-12-17", "P6"],
-  ["Blade", "1998-08-21", "EXT"],
-  ["Blade II", "2002-03-22", "EXT"],
-  ["Spider-Man", "2002-05-03", "EXT"],
-  ["Spider-Man 2", "2004-06-30", "EXT"],
-  ["Blade: Trinity", "2004-12-08", "EXT"],
-  ["Spider-Man 3", "2007-05-04", "EXT"],
-  ["The Amazing Spider-Man", "2012-07-03", "EXT"],
-  ["The Amazing Spider-Man 2", "2014-05-02", "EXT"],
-  ["Venom", "2018-10-05", "EXT"],
-  ["Spider-Man: Into the Spider-Verse", "2018-12-14", "EXT"],
-  ["Venom: Let There Be Carnage", "2021-10-01", "EXT"],
-  ["Morbius", "2022-04-01", "EXT"],
-  ["Spider-Man: Across the Spider-Verse", "2023-06-02", "EXT"],
-  ["Venom: The Last Dance", "2024-10-25", "EXT"],
-  ["Kraven the Hunter", "2024-12-13", "EXT"],
-].map(([title, date, phase]) => ({
+  ["Iron Man", "2008-05-02", "P1", "Iron Man"],
+  ["The Incredible Hulk", "2008-06-13", "P1", null],
+  ["Iron Man 2", "2010-05-07", "P1", "Iron Man"],
+  ["Thor", "2011-05-06", "P1", "Thor"],
+  ["Captain America: The First Avenger", "2011-07-22", "P1", "Captain America"],
+  ["The Avengers", "2012-05-04", "P1", "Avengers"],
+  ["Iron Man 3", "2013-05-03", "P2", "Iron Man"],
+  ["Thor: The Dark World", "2013-11-08", "P2", "Thor"],
+  ["Captain America: The Winter Soldier", "2014-04-04", "P2", "Captain America"],
+  ["Guardians of the Galaxy", "2014-08-01", "P2", "Guardians of the Galaxy"],
+  ["Avengers: Age of Ultron", "2015-05-01", "P2", "Avengers"],
+  ["Ant-Man", "2015-07-17", "P2", "Ant-Man"],
+  ["Captain America: Civil War", "2016-05-06", "P3", "Captain America"],
+  ["Doctor Strange", "2016-11-04", "P3", "Doctor Strange"],
+  ["Guardians of the Galaxy Vol. 2", "2017-05-05", "P3", "Guardians of the Galaxy"],
+  ["Spider-Man: Homecoming", "2017-07-07", "P3", "Spider-Man (MCU)"],
+  ["Thor: Ragnarok", "2017-11-03", "P3", "Thor"],
+  ["Black Panther", "2018-02-16", "P3", "Black Panther"],
+  ["Avengers: Infinity War", "2018-04-27", "P3", "Avengers"],
+  ["Ant-Man and the Wasp", "2018-07-06", "P3", "Ant-Man"],
+  ["Captain Marvel", "2019-03-08", "P3", "Captain Marvel"],
+  ["Avengers: Endgame", "2019-04-26", "P3", "Avengers"],
+  ["Spider-Man: Far From Home", "2019-07-02", "P3", "Spider-Man (MCU)"],
+  ["Black Widow", "2021-07-09", "P4", null],
+  ["Shang-Chi and the Legend of the Ten Rings", "2021-09-03", "P4", null],
+  ["Eternals", "2021-11-05", "P4", null],
+  ["Spider-Man: No Way Home", "2021-12-17", "P4", "Spider-Man (MCU)"],
+  ["Doctor Strange in the Multiverse of Madness", "2022-05-06", "P4", "Doctor Strange"],
+  ["Thor: Love and Thunder", "2022-07-08", "P4", "Thor"],
+  ["Black Panther: Wakanda Forever", "2022-11-11", "P4", "Black Panther"],
+  ["Ant-Man and the Wasp: Quantumania", "2023-02-17", "P5", "Ant-Man"],
+  ["Guardians of the Galaxy Vol. 3", "2023-05-05", "P5", "Guardians of the Galaxy"],
+  ["The Marvels", "2023-11-10", "P5", "Captain Marvel"],
+  ["Deadpool & Wolverine", "2024-07-26", "P5", null],
+  ["Captain America: Brave New World", "2025-02-14", "P5", "Captain America"],
+  ["Thunderbolts*", "2025-05-02", "P5", null],
+  ["The Fantastic Four: First Steps", "2025-07-25", "P6", null],
+  ["Spider-Man: Brand New Day", "2026-07-31", "P6", "Spider-Man (MCU)"],
+  ["Avengers: Doomsday", "2026-12-18", "P6", "Avengers"],
+  ["Avengers: Secret Wars", "2027-12-17", "P6", "Avengers"],
+  ["Blade", "1998-08-21", "EXT", "Blade"],
+  ["Blade II", "2002-03-22", "EXT", "Blade"],
+  ["Spider-Man", "2002-05-03", "EXT", "Spider-Man (Raimi)"],
+  ["Spider-Man 2", "2004-06-30", "EXT", "Spider-Man (Raimi)"],
+  ["Blade: Trinity", "2004-12-08", "EXT", "Blade"],
+  ["Spider-Man 3", "2007-05-04", "EXT", "Spider-Man (Raimi)"],
+  ["The Amazing Spider-Man", "2012-07-03", "EXT", "The Amazing Spider-Man"],
+  ["The Amazing Spider-Man 2", "2014-05-02", "EXT", "The Amazing Spider-Man"],
+  ["Venom", "2018-10-05", "EXT", "Venom"],
+  ["Spider-Man: Into the Spider-Verse", "2018-12-14", "EXT", "Spider-Verse (Animated)"],
+  ["Venom: Let There Be Carnage", "2021-10-01", "EXT", "Venom"],
+  ["Morbius", "2022-04-01", "EXT", null],
+  ["Spider-Man: Across the Spider-Verse", "2023-06-02", "EXT", "Spider-Verse (Animated)"],
+  ["Venom: The Last Dance", "2024-10-25", "EXT", "Venom"],
+  ["Kraven the Hunter", "2024-12-13", "EXT", null],
+].map(([title, date, phase, series]) => ({
   id: title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") + "-" + date.slice(0, 4),
   title,
   date,
   year: date.slice(0, 4),
   phase,
+  series: series || null,
   custom: false,
 }));
 
@@ -235,6 +236,38 @@ export default function App() {
       return b.avgRating - a.avgRating;
     });
 
+  // ---------- Series summary (franchises with 2+ visible movies) ----------
+  const seriesStats = {};
+  visibleOrder.forEach((id) => {
+    const m = movies[id];
+    if (!m || !m.series) return;
+    const key = m.series;
+    if (!seriesStats[key]) seriesStats[key] = { count: 0, rankSum: 0, ratingSum: 0, ratingCount: 0 };
+    seriesStats[key].count += 1;
+    seriesStats[key].rankSum += rankOf[id];
+    const r = ratings[id] || 0;
+    if (r > 0) {
+      seriesStats[key].ratingSum += r;
+      seriesStats[key].ratingCount += 1;
+    }
+  });
+
+  const seriesSummary = Object.entries(seriesStats)
+    .filter(([, s]) => s.count >= 2)
+    .map(([key, s]) => ({
+      key,
+      avgRank: s.rankSum / s.count,
+      avgRating: s.ratingCount ? s.ratingSum / s.ratingCount : null,
+      ratedCount: s.ratingCount,
+      count: s.count,
+    }))
+    .sort((a, b) => {
+      if (a.avgRating == null && b.avgRating == null) return a.avgRank - b.avgRank;
+      if (a.avgRating == null) return 1;
+      if (b.avgRating == null) return -1;
+      return b.avgRating - a.avgRating;
+    });
+
   // ---------- Drag logic (pointer-based, touch friendly) ----------
   const handlePointerDown = (e, id) => {
     if (mode !== "rank") return;
@@ -306,7 +339,7 @@ export default function App() {
   }, [draggingId]);
 
   // ---------- Add / delete custom movies ----------
-  const [form, setForm] = useState({ title: "", date: "", phase: "P6" });
+  const [form, setForm] = useState({ title: "", date: "", phase: "P6", series: "" });
 
   const addMovie = () => {
     if (!form.title.trim() || !form.date) return;
@@ -317,11 +350,12 @@ export default function App() {
       date: form.date,
       year: form.date.slice(0, 4),
       phase: form.phase,
+      series: form.series.trim() || null,
       custom: true,
     };
     setMovies((prev) => ({ ...prev, [id]: newMovie }));
     setOrder((prev) => [...prev, id]);
-    setForm({ title: "", date: "", phase: "P6" });
+    setForm({ title: "", date: "", phase: "P6", series: "" });
     setShowAdd(false);
   };
 
@@ -440,44 +474,103 @@ export default function App() {
         )}
 
         {phaseSummary.length > 0 && (
-          <div
-            style={{
-              display: "flex",
-              gap: 8,
-              overflowX: "auto",
-              marginTop: 16,
-              paddingBottom: 4,
-              WebkitOverflowScrolling: "touch",
-              scrollbarWidth: "none",
-            }}
-          >
-            {phaseSummary.map((p) => (
-              <div
-                key={p.key}
-                style={{
-                  flexShrink: 0,
-                  minWidth: 96,
-                  background: "#151822",
-                  borderTop: `3px solid ${p.color}`,
-                  borderRadius: 8,
-                  padding: "8px 10px",
-                }}
-              >
-                <div style={{ fontSize: 10.5, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.04em", color: p.color, marginBottom: 4 }}>
-                  {p.key === "EXT" ? "Extended" : `Phase ${p.key.slice(1)}`}
+          <>
+            <div style={{ fontSize: 10, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.06em", color: "#4A4E5E", marginTop: 16, marginBottom: 6 }}>
+              By Phase
+            </div>
+            <div
+              style={{
+                display: "flex",
+                gap: 8,
+                overflowX: "auto",
+                paddingBottom: 4,
+                WebkitOverflowScrolling: "touch",
+                scrollbarWidth: "none",
+              }}
+            >
+              {phaseSummary.map((p) => (
+                <div
+                  key={p.key}
+                  style={{
+                    flexShrink: 0,
+                    minWidth: 96,
+                    background: "#151822",
+                    borderTop: `3px solid ${p.color}`,
+                    borderRadius: 8,
+                    padding: "8px 10px",
+                  }}
+                >
+                  <div style={{ fontSize: 10.5, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.04em", color: p.color, marginBottom: 4 }}>
+                    {p.key === "EXT" ? "Extended" : `Phase ${p.key.slice(1)}`}
+                  </div>
+                  <div style={{ display: "flex", alignItems: "baseline", gap: 4 }}>
+                    <Star size={11} fill={p.avgRating != null ? "#D4A94F" : "none"} color={p.avgRating != null ? "#D4A94F" : "#4A4E5E"} />
+                    <span className="tabular" style={{ fontSize: 13, fontWeight: 800, color: p.avgRating != null ? "#F5F1E8" : "#4A4E5E" }}>
+                      {p.avgRating != null ? p.avgRating.toFixed(1) : "—"}
+                    </span>
+                  </div>
+                  <div className="tabular" style={{ fontSize: 10.5, color: "#8B92A8", marginTop: 2 }}>
+                    avg rank #{p.avgRank.toFixed(1)}
+                  </div>
                 </div>
-                <div style={{ display: "flex", alignItems: "baseline", gap: 4 }}>
-                  <Star size={11} fill={p.avgRating != null ? "#D4A94F" : "none"} color={p.avgRating != null ? "#D4A94F" : "#4A4E5E"} />
-                  <span className="tabular" style={{ fontSize: 13, fontWeight: 800, color: p.avgRating != null ? "#F5F1E8" : "#4A4E5E" }}>
-                    {p.avgRating != null ? p.avgRating.toFixed(1) : "—"}
-                  </span>
+              ))}
+            </div>
+          </>
+        )}
+
+        {seriesSummary.length > 0 && (
+          <>
+            <div style={{ fontSize: 10, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.06em", color: "#4A4E5E", marginTop: 14, marginBottom: 6 }}>
+              By Series
+            </div>
+            <div
+              style={{
+                display: "flex",
+                gap: 8,
+                overflowX: "auto",
+                paddingBottom: 4,
+                WebkitOverflowScrolling: "touch",
+                scrollbarWidth: "none",
+              }}
+            >
+              {seriesSummary.map((s) => (
+                <div
+                  key={s.key}
+                  style={{
+                    flexShrink: 0,
+                    minWidth: 128,
+                    background: "#151822",
+                    borderTop: "3px solid #D4A94F",
+                    borderRadius: 8,
+                    padding: "8px 10px",
+                  }}
+                >
+                  <div
+                    style={{
+                      fontSize: 10.5,
+                      fontWeight: 800,
+                      color: "#F5F1E8",
+                      marginBottom: 4,
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                  >
+                    {s.key}
+                  </div>
+                  <div style={{ display: "flex", alignItems: "baseline", gap: 4 }}>
+                    <Star size={11} fill={s.avgRating != null ? "#D4A94F" : "none"} color={s.avgRating != null ? "#D4A94F" : "#4A4E5E"} />
+                    <span className="tabular" style={{ fontSize: 13, fontWeight: 800, color: s.avgRating != null ? "#F5F1E8" : "#4A4E5E" }}>
+                      {s.avgRating != null ? s.avgRating.toFixed(1) : "—"}
+                    </span>
+                  </div>
+                  <div className="tabular" style={{ fontSize: 10.5, color: "#8B92A8", marginTop: 2 }}>
+                    avg rank #{s.avgRank.toFixed(1)} · {s.count} films
+                  </div>
                 </div>
-                <div className="tabular" style={{ fontSize: 10.5, color: "#8B92A8", marginTop: 2 }}>
-                  avg rank #{p.avgRank.toFixed(1)}
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          </>
         )}
       </div>
 
@@ -597,6 +690,12 @@ export default function App() {
                 <ChevronDown size={14} style={{ position: "absolute", right: 9, top: 11, color: "#8B92A8", pointerEvents: "none" }} />
               </div>
             </div>
+            <input
+              placeholder="Series / franchise (optional, e.g. Iron Man)"
+              value={form.series}
+              onChange={(e) => setForm({ ...form, series: e.target.value })}
+              style={{ background: "#0B0D14", border: "1px solid #2A2E3A", borderRadius: 7, padding: "9px 10px", color: "#F5F1E8", fontSize: 13.5 }}
+            />
             <button
               onClick={addMovie}
               style={{ background: "#D4A94F", border: "none", borderRadius: 7, padding: "10px", color: "#0B0D14", fontWeight: 800, fontSize: 13, cursor: "pointer" }}
