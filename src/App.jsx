@@ -89,6 +89,13 @@ const DEFAULTS = [
   ["Fantastic Four", "2005-07-08", "EXT", "Fantastic Four (Fox)"],
   ["Fantastic Four: Rise of the Silver Surfer", "2007-06-15", "EXT", "Fantastic Four (Fox)"],
   ["Fantastic Four", "2015-08-07", "EXT", "Fantastic Four (Fox)"],
+  ["Howard the Duck", "1986-08-01", "EXT", null],
+  ["The Punisher", "1989-10-05", "EXT", "The Punisher"],
+  ["The Punisher", "2004-04-16", "EXT", "The Punisher"],
+  ["Punisher: War Zone", "2008-12-05", "EXT", "The Punisher"],
+  ["Ghost Rider", "2007-02-16", "EXT", "Ghost Rider"],
+  ["Ghost Rider: Spirit of Vengeance", "2012-02-17", "EXT", "Ghost Rider"],
+  ["Madame Web", "2024-02-14", "EXT", null],
 ].map(([title, date, phase, series]) => ({
   id: title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") + "-" + date.slice(0, 4),
   title,
