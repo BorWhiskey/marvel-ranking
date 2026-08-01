@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { GripVertical, X, Plus, Film, ChevronDown, Download, Upload } from "lucide-react";
+import { GripVertical, X, Plus, Film, ChevronDown, Download, Upload, Star } from "lucide-react";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db, firebaseConfigured } from "./firebaseClient";
 
@@ -91,6 +91,7 @@ export default function App() {
   const [showAdd, setShowAdd] = useState(false);
   const [draggingId, setDraggingId] = useState(null);
   const [saveState, setSaveState] = useState({ status: "idle", message: "" });
+  const [ratings, setRatings] = useState({}); // id -> 1..5
 
   const orderRef = useRef(order);
   orderRef.current = order;
@@ -103,6 +104,7 @@ export default function App() {
       DEFAULTS.forEach((m) => (base[m.id] = m));
       let finalOrder = DEFAULTS.map((m) => m.id);
       let finalIncludeExtended = true;
+      let finalRatings = {};
 
       if (!firebaseConfigured) {
         setSaveState({
@@ -124,6 +126,9 @@ export default function App() {
             if (typeof saved.includeExtended === "boolean") {
               finalIncludeExtended = saved.includeExtended;
             }
+            if (saved.ratings && typeof saved.ratings === "object") {
+              finalRatings = saved.ratings;
+            }
           }
           setSaveState({ status: "saved", message: "Synced" });
         } catch (e) {
@@ -134,13 +139,14 @@ export default function App() {
       setMovies(base);
       setOrder(finalOrder);
       setIncludeExtended(finalIncludeExtended);
+      setRatings(finalRatings);
       setLoaded(true);
     })();
   }, []);
 
   // ---------- Save (debounced) ----------
   const saveTimer = useRef(null);
-  const persist = useCallback((nextOrder, nextMovies, nextIncludeExtended) => {
+  const persist = useCallback((nextOrder, nextMovies, nextIncludeExtended, nextRatings) => {
     if (!firebaseConfigured) return;
     if (saveTimer.current) clearTimeout(saveTimer.current);
     saveTimer.current = setTimeout(async () => {
@@ -150,6 +156,7 @@ export default function App() {
           order: nextOrder,
           custom,
           includeExtended: nextIncludeExtended,
+          ratings: nextRatings,
           updatedAt: new Date().toISOString(),
         };
         await setDoc(doc(db, ...DOC_PATH), payload);
@@ -165,8 +172,8 @@ export default function App() {
 
   useEffect(() => {
     if (!loaded) return;
-    persist(order, movies, includeExtended);
-  }, [order, movies, includeExtended, loaded, persist]);
+    persist(order, movies, includeExtended, ratings);
+  }, [order, movies, includeExtended, ratings, loaded, persist]);
 
   // ---------- Derived lists ----------
   const visibleOrder = order.filter((id) => {
@@ -182,6 +189,51 @@ export default function App() {
     mode === "rank"
       ? visibleOrder
       : [...visibleOrder].sort((a, b) => (movies[a].date < movies[b].date ? -1 : 1));
+
+  const setRating = (id, value) => {
+    setRatings((prev) => {
+      const current = prev[id] || 0;
+      const next = { ...prev };
+      if (current === value) {
+        delete next[id]; // tap same star again to clear
+      } else {
+        next[id] = value;
+      }
+      return next;
+    });
+  };
+
+  // ---------- Phase summary (avg rating + avg rank per phase, visible set only) ----------
+  const phaseStats = {};
+  visibleOrder.forEach((id) => {
+    const m = movies[id];
+    if (!m) return;
+    const key = m.phase;
+    if (!phaseStats[key]) phaseStats[key] = { count: 0, rankSum: 0, ratingSum: 0, ratingCount: 0 };
+    phaseStats[key].count += 1;
+    phaseStats[key].rankSum += rankOf[id];
+    const r = ratings[id] || 0;
+    if (r > 0) {
+      phaseStats[key].ratingSum += r;
+      phaseStats[key].ratingCount += 1;
+    }
+  });
+
+  const phaseSummary = Object.entries(phaseStats)
+    .map(([key, s]) => ({
+      key,
+      ...PHASES[key],
+      avgRank: s.rankSum / s.count,
+      avgRating: s.ratingCount ? s.ratingSum / s.ratingCount : null,
+      ratedCount: s.ratingCount,
+      count: s.count,
+    }))
+    .sort((a, b) => {
+      if (a.avgRating == null && b.avgRating == null) return a.avgRank - b.avgRank;
+      if (a.avgRating == null) return 1;
+      if (b.avgRating == null) return -1;
+      return b.avgRating - a.avgRating;
+    });
 
   // ---------- Drag logic (pointer-based, touch friendly) ----------
   const handlePointerDown = (e, id) => {
@@ -287,7 +339,7 @@ export default function App() {
 
   const exportBackup = () => {
     const custom = Object.values(movies).filter((m) => m.custom);
-    const payload = { order, custom, includeExtended, exportedAt: new Date().toISOString() };
+    const payload = { order, custom, includeExtended, ratings, exportedAt: new Date().toISOString() };
     const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -316,6 +368,7 @@ export default function App() {
         setMovies(base);
         setOrder([...savedValid, ...missing]);
         if (typeof saved.includeExtended === "boolean") setIncludeExtended(saved.includeExtended);
+        if (saved.ratings && typeof saved.ratings === "object") setRatings(saved.ratings);
       } catch (err) {
         alert("That file doesn't look like a valid backup.");
       }
@@ -354,6 +407,7 @@ export default function App() {
         .seg-btn { transition: background 120ms ease, color 120ms ease; }
         .icon-btn:hover { opacity: 1 !important; }
         ::selection { background: #D4A94F55; }
+        div::-webkit-scrollbar { display: none; }
       `}</style>
 
       <div style={{ padding: "32px 20px 20px", maxWidth: 720, margin: "0 auto" }}>
@@ -383,6 +437,47 @@ export default function App() {
         )}
         {saveState.status === "saved" && (
           <p style={{ color: "#4C8DFF", fontSize: 11.5, margin: "6px 0 0", fontWeight: 600 }}>● {saveState.message}</p>
+        )}
+
+        {phaseSummary.length > 0 && (
+          <div
+            style={{
+              display: "flex",
+              gap: 8,
+              overflowX: "auto",
+              marginTop: 16,
+              paddingBottom: 4,
+              WebkitOverflowScrolling: "touch",
+              scrollbarWidth: "none",
+            }}
+          >
+            {phaseSummary.map((p) => (
+              <div
+                key={p.key}
+                style={{
+                  flexShrink: 0,
+                  minWidth: 96,
+                  background: "#151822",
+                  borderTop: `3px solid ${p.color}`,
+                  borderRadius: 8,
+                  padding: "8px 10px",
+                }}
+              >
+                <div style={{ fontSize: 10.5, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.04em", color: p.color, marginBottom: 4 }}>
+                  {p.key === "EXT" ? "Extended" : `Phase ${p.key.slice(1)}`}
+                </div>
+                <div style={{ display: "flex", alignItems: "baseline", gap: 4 }}>
+                  <Star size={11} fill={p.avgRating != null ? "#D4A94F" : "none"} color={p.avgRating != null ? "#D4A94F" : "#4A4E5E"} />
+                  <span className="tabular" style={{ fontSize: 13, fontWeight: 800, color: p.avgRating != null ? "#F5F1E8" : "#4A4E5E" }}>
+                    {p.avgRating != null ? p.avgRating.toFixed(1) : "—"}
+                  </span>
+                </div>
+                <div className="tabular" style={{ fontSize: 10.5, color: "#8B92A8", marginTop: 2 }}>
+                  avg rank #{p.avgRank.toFixed(1)}
+                </div>
+              </div>
+            ))}
+          </div>
         )}
       </div>
 
@@ -612,6 +707,21 @@ export default function App() {
                   >
                     {phase.label}
                   </span>
+                </div>
+                <div style={{ display: "flex", gap: 3, marginTop: 5 }}>
+                  {[1, 2, 3, 4, 5].map((n) => {
+                    const active = n <= (ratings[id] || 0);
+                    return (
+                      <button
+                        key={n}
+                        onClick={() => setRating(id, n)}
+                        aria-label={`Rate ${m.title} ${n} star${n > 1 ? "s" : ""}`}
+                        style={{ background: "none", border: "none", padding: 2, cursor: "pointer", lineHeight: 0 }}
+                      >
+                        <Star size={13} fill={active ? "#D4A94F" : "none"} color={active ? "#D4A94F" : "#3A3E4A"} />
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
