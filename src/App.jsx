@@ -410,7 +410,7 @@ export default function App() {
         div::-webkit-scrollbar { display: none; }
       `}</style>
 
-      <div style={{ padding: "32px 20px 20px", maxWidth: 720, margin: "0 auto" }}>
+      <div style={{ padding: "32px 20px 20px", maxWidth: 960, margin: "0 auto" }}>
         <h1 style={{ fontSize: 28, fontWeight: 800, letterSpacing: "0.06em", margin: 0, textTransform: "uppercase" }}>
           Marvel Rankings
         </h1>
@@ -481,7 +481,7 @@ export default function App() {
         )}
       </div>
 
-      <div style={{ maxWidth: 720, margin: "0 auto", padding: "0 20px 20px", display: "flex", flexDirection: "column", gap: 14 }}>
+      <div style={{ maxWidth: 960, margin: "0 auto", padding: "0 20px 20px", display: "flex", flexDirection: "column", gap: 14 }}>
         <div style={{ display: "flex", background: "#151822", borderRadius: 10, padding: 4, gap: 4 }}>
           {[
             { key: "rank", label: "My Ranking" },
@@ -623,7 +623,7 @@ export default function App() {
         </div>
       </div>
 
-      <div style={{ maxWidth: 720, margin: "0 auto", padding: "0 20px", display: "flex", flexDirection: "column", gap: 8 }}>
+      <div style={{ maxWidth: 960, margin: "0 auto", padding: "0 20px", display: "flex", flexDirection: "column", gap: 8 }}>
         {displayIds.map((id) => {
           const m = movies[id];
           if (!m) return null;
